@@ -2,6 +2,7 @@ import streamlit as st
 # from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain_google_genai import GoogleGenerativeAI
+import tempfile
 
 GOOGLE_API_KEY="AIzaSyCuPwAiKexa4yixaefiU7L7-M5S7_TAew8"
 
@@ -35,6 +36,16 @@ def main():
             poem = llm.invoke(prompt)
             st.subheader("Generated Poem:")
             st.write(poem)
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".txt") as tmp:
+                tmp.write(poem.encode("utf-8"))
+                tmp.seek(0)
+                st.download_button(
+                    label="Download Poem",
+                    data=tmp.read(),
+                    file_name=f"{city}_{date.strftime('%Y%m%d')}.txt",
+                    mime="text/plain",
+                )
         else:
             st.warning("Please enter valid inputs for city, pollution rate, and poem length.")
 
