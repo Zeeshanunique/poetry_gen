@@ -1,0 +1,4 @@
+streamlit
+transformers
+langchain
+langchain-google-genai
